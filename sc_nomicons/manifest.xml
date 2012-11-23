@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE extension SYSTEM "ext-1.0.dtd">
+
+<!--
+/**
+ * Adds nomicon emoticons to PunBB.
+ */
+-->
+
+<extension engine="1.0">
+	<id>sc_nomicons</id>
+	<title>Nomicon Emoticons</title>
+	<version>1.0.0</version>
+	<description>Adds nomicon emoticons to PunBB.</description>
+	<author>Sam Clarke</author>
+
+	<minversion>1.4</minversion>
+	<maxtestedon>1.4.2</maxtestedon>
+
+	<install><![CDATA[
+		// copy emoticons to the smilies directory
+		$nomicons_dir = FORUM_ROOT . 'img/smilies/nomicons/';
+		
+		if(!mkdir($nomicons_dir))
+			die('Please change the permissions on the folder "' . FORUM_ROOT . 'img/smilies/" to 755.');
+		
+		foreach(glob("{$ext_info['path']}/emoticons/{*.gif,*.png}", GLOB_BRACE) as $file)
+			copy($file, $nomicons_dir . pathinfo($file, PATHINFO_BASENAME));
+	]]></install>
+	
+	<uninstall><![CDATA[
+		// remove emoticons that were copied in install
+		$nomicons_dir = FORUM_ROOT . 'img/smilies/nomicons/';
+		
+		foreach(glob("{$nomicons_dir}{*.gif,*.png}", GLOB_BRACE) as $file)
+			unlink($file);
+
+		rmdir($nomicons_dir);
+	]]></uninstall>
+
+	<hooks>
+		<hook id="ps_start"><![CDATA[
+			// override default smilies
+			$smilies = array(
+					':)'			=> 'nomicons/smile.png',
+					':lol:'			=> 'nomicons/laughing.png',
+					':angel:'		=> 'nomicons/angel.png',
+					':mad:'			=> 'nomicons/angry.png',
+					':cool:'		=> 'nomicons/cool.png',
+					':rolleyes:'	=> 'nomicons/rolleyes.gif',
+					':&#039;('		=> 'nomicons/cwy.png',
+					':ermm:'		=> 'nomicons/ermm.png',
+					':D'			=> 'nomicons/grin.png',
+					'<3'			=> 'nomicons/heart.png',
+					':('			=> 'nomicons/sad.png',
+					':o'			=> 'nomicons/shocked.png',
+					':P'			=> 'nomicons/tongue.png',
+					';)'			=> 'nomicons/wink.png',
+					':alien:'		=> 'nomicons/alien.png',
+					':blink:'		=> 'nomicons/blink.png',
+					':blush:'		=> 'nomicons/blush.png',
+					':cheerful:'	=> 'nomicons/cheerful.png',
+					':devil:'		=> 'nomicons/devil.png',
+					':dizzy:'		=> 'nomicons/dizzy.png',
+					':getlost:'		=> 'nomicons/getlost.png',
+					':happy:'		=> 'nomicons/happy.png',
+					':kissing:'		=> 'nomicons/kissing.png',
+					':ninja:'		=> 'nomicons/ninja.png',
+					':pinch:'		=> 'nomicons/pinch.png',
+					':|'		=> 'nomicons/pouty.png',
+					':sick:'		=> 'nomicons/sick.png',
+					':sideways:'	=> 'nomicons/sideways.png',
+					':silly:'		=> 'nomicons/silly.png',
+					':sleeping:'	=> 'nomicons/sleeping.png',
+					':/'		=> 'nomicons/unsure.png',
+					':woot:'		=> 'nomicons/w00t.png',
+					':wassat:'		=> 'nomicons/wassat.png',
+					':whistling:'	=> 'nomicons/whistling.png',
+					':love:'		=> 'nomicons/wub.png'
+				);
+		]]></hook>
+		
+		<hook id="ps_do_smilies_start"><![CDATA[
+			// this is needed to change the width and height to 20 instead of the defualt size
+			$text = ' '.$text.' ';
+
+			foreach ($smilies as $smiley_text => $smiley_img)
+			{
+				if (strpos($text, $smiley_text) !== false)
+					$text = preg_replace("#(?<=(?:\W|>))".preg_quote($smiley_text, '#')."(?=(?:\W|<))#m", '<img src="'.$base_url.'/img/smilies/'.$smiley_img.'" width="20" alt="'.substr($smiley_img, 0, strrpos($smiley_img, '.')).'" />', $text);
+			}
+			
+			return $text;
+		]]></hook>
+	</hooks>
+</extension>
