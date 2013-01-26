@@ -1,22 +1,10 @@
 PUNBB.env.sceditor = true;
 
-$.sceditor.command.set(
-	"formsubmit", {
-		keyPress: function (e) {
-			if((e.keyCode == 13 || e.keyCode == 10) && e.ctrlKey)
-				$("textarea[name=req_message]").parents("form").submit();
-		}
-	}
-);
-
-if(!$.fn.off)
-	$.fn.off = function() {
-		return $(this).unbind();
-	};
-
 var sceditorInit = function () {
-	var textarea = $("textarea[name=req_message]");
-	var width    = 100*(textarea.width()/textarea.offsetParent().width());
+	'use strict';
+
+	var $textarea = $("textarea[name=req_message]");
+	var width     = 100*($textarea.width()/$textarea.offsetParent().width());
 
 	$.sceditorBBCodePlugin.bbcode
 		.set("list", {
@@ -33,7 +21,11 @@ var sceditorInit = function () {
 		.set("*", { excludeClosing: true, isInline: false })
 		.remove("hr").remove("table").remove("th").remove("td").remove("tr");
 
-	textarea.sceditor({
+	$.sceditor.command
+		.set("bulletlist", { txtExec: ["[list]\n[*]", "\n[/list]"] })
+		.set("orderedlist", { txtExec: ["[list=1]\n[*]", "\n[/list]"] });
+
+	$textarea.sceditor({
 		plugins:		'bbcode',
 		style:			sceditor_opts.root_url + '/style/' + sceditor_opts.style + '/jquery.sceditor.default.min.css?v=51',
 		toolbar:		sceditor_opts.toolbar,
@@ -43,8 +35,12 @@ var sceditorInit = function () {
 		locale:			sceditor_opts.locale,
 		resizeMaxWidth:		0, // Do not allow width to be resized, only height
 		emoticonsCompat:	true,
-		defaultColor:		"#333333",
-		defaultFont:		"Verdana, Helvetica, Arial, sans-serif"
+		rtl:			null // Auto detect RTL based on HTML dir
+	});
+
+	$textarea.sceditor("instance").keyPress(function (e) {
+		if((e.keyCode == 13 || e.keyCode == 10) && e.ctrlKey)
+			$textarea.parents("form").submit();
 	});
 
 	if(PUNBB.common.input_support_attr("required"))
@@ -54,10 +50,10 @@ var sceditorInit = function () {
 	// editor can handle the event and populate the value of the textarea before
 	// the validation function starts. Otherwise the validate will complain the
 	// value is empty
-	textarea.parents("form").find(":submit").each(function() {
+	$textarea.parents("form").find(":submit").each(function() {
 		var clickFunc = this.onclick;
 		this.onclick  = function() {};
-		textarea.parents("form").submit(function() { return clickFunc(); });
+		$textarea.parents("form").submit(function() { return clickFunc(); });
 	});
 };
 

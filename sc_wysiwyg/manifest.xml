@@ -15,7 +15,7 @@
 <extension engine="1.0">
 	<id>sc_wysiwyg</id>
 	<title>SC WYSIWYG BBCode editor</title>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<description>Adds a WYSIWYG BBCode editor to PunBB.</description>
 	<author>Sam Clarke</author>
 
@@ -75,9 +75,10 @@
 		<hook id="ft_js_include" priority="5"><![CDATA[
 			if (isset($forum_loader) && $forum_user['sc_wysiwyg_enabled'] && ((FORUM_PAGE == 'viewtopic' && $forum_config['o_quickpost']) || in_array(FORUM_PAGE, array('post', 'postedit'))))
 			{
-				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.min.js?v=50');
+				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.bbcode.min.js?v=50');
 
 				$sceditor_langs = array(
+						'Arabic'              => 'ar',
 						'Norwegian'           => 'no',
 						'Russian'             => 'ru',
 						'French'              => 'fr',
