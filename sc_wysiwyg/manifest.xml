@@ -5,7 +5,7 @@
 /**
  * Adds a WYSIWYG BBCode editor to PunBB.
  *
- * @copyright (C) 2011-2012 Sam Clarke
+ * @copyright (C) 2011-2014 Sam Clarke
  * @license http://www.gnu.org/licenses/gpl.html GPL
  * @license http://www.opensource.org/licenses/mit-license.php MIT
  * @package sc_wysiwyg
@@ -15,7 +15,7 @@
 <extension engine="1.0">
 	<id>sc_wysiwyg</id>
 	<title>SC WYSIWYG BBCode editor</title>
-	<version>1.4.1</version>
+	<version>1.4.5</version>
 	<description>Adds a WYSIWYG BBCode editor to PunBB.</description>
 	<author>Sam Clarke</author>
 
@@ -64,9 +64,9 @@
 			if ($forum_user['sc_wysiwyg_enabled'] && ((FORUM_PAGE == 'viewtopic' && $forum_config['o_quickpost']) || in_array(FORUM_PAGE, array('post', 'postedit'))))
 			{
 				if (file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/jquery.sceditor.min.css'))
-					$style = $ext_info['url'].'/style/'.$forum_user['style'].'/jquery.sceditor.min.css?v=023';
+					$style = $ext_info['url'].'/style/'.$forum_user['style'].'/jquery.sceditor.min.css?v=1.4.5';
 				else
-					$style = $ext_info['url'].'/style/Oxygen/jquery.sceditor.min.css?v=012';
+					$style = $ext_info['url'].'/style/Oxygen/jquery.sceditor.min.css?v=1.4.5';
 
 				$forum_loader->add_css($style, array('weight' => 0));
 			}
@@ -75,7 +75,7 @@
 		<hook id="ft_js_include" priority="5"><![CDATA[
 			if (isset($forum_loader) && $forum_user['sc_wysiwyg_enabled'] && ((FORUM_PAGE == 'viewtopic' && $forum_config['o_quickpost']) || in_array(FORUM_PAGE, array('post', 'postedit'))))
 			{
-				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.bbcode.min.js?v=50');
+				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.bbcode.min.js?v=1.4.5');
 
 				$sceditor_langs = array(
 						'Arabic'              => 'ar',
@@ -99,7 +99,7 @@
 				else
 					$locale_opt = 'en';
 
-				if (file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/jquery.sceditor.default.min.css?50'))
+				if (file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/jquery.sceditor.default.min.css'))
 					$style = $forum_user['style'];
 				else
 					$style = 'Oxygen';
@@ -116,7 +116,7 @@
 					array('type' => 'inline')
 				);
 
-				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.punbb-helper.js?v=50');
+				$forum_loader->add_js($ext_info['url'].'/js/jquery.sceditor.punbb-helper.js?v=1.4.5');
 			}
 		]]></hook>
 

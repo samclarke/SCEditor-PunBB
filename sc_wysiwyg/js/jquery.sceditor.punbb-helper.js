@@ -1,6 +1,6 @@
 PUNBB.env.sceditor = true;
 
-var sceditorInit = function () {
+PUNBB.common.addLoadEvent(function () {
 	'use strict';
 
 	var $textarea = $("textarea[name=req_message]");
@@ -55,6 +55,4 @@ var sceditorInit = function () {
 		this.onclick  = function() {};
 		$textarea.parents("form").submit(function() { return clickFunc(); });
 	});
-};
-
-PUNBB.common.addLoadEvent(sceditorInit);
+});
